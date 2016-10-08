@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+    <meta charset="UTF-8">
+    <title>Nothing Happens Here</title>
+    <script src="pixi.js"></script>
+    <script src="proton.min.js"></script>
+  </head>
+
+    <body>
+
+		<iframe src="http://youtubeonrepeat.com/watch/?v=aDfZ6STAfqA"
+			   width="0" height="0" frameborder="0"></iframe>
+
+		 <iframe src="http://youtubeonrepeat.com/watch/?v=ZxnqSTzq6-w"
+			   width="0" height="0" frameborder="0"></iframe>
+
+		<script>
+
+		//create renderer
+		var width = window.innerWidth;
+		var height = window.innerHeight;
+
+		var pixiRenderer = PIXI.autoDetectRenderer(width, height, {backgroundColor: 0xFFFFFF});
+		document.body.appendChild(pixiRenderer.view);
+
+		// create the root of the scene graph
+		var pixiContainer = new PIXI.Container();
+
+		//create soon text
+		var style2 = {
+		font : "bold 200px Arial",
+		dropShadow : "true",
+		dropShadowColor : 0xd9d9d9
+		};
+
+		var soon = new PIXI.Text('Soon', style2);
+		soon.x = width * 0.55;
+		soon.y = height / 4;
+
+		pixiContainer.addChild(soon);
+
+    //create author text
+		var style1 = {
+		font : "italic 20px Arial",
+		fill : 0xAAAAAA
+		};
+
+		var author = new PIXI.Text('By Russel Demos', style1);
+		author.x = soon.x + (soon.width / 3);
+		author.y = soon.y + (soon.height);
+
+		pixiContainer.addChild(author);
+
+		var blurFilter1 = new PIXI.filters.BlurFilter();
+		var blurFilter2 = new PIXI.filters.BlurFilter();
+
+		soon.filters = [blurFilter1];
+		author.filters = [blurFilter2];
+
+    //init proton
+    var proton = new Proton();
+    var emitter = new Proton.Emitter();
+
+		//Define Emitter
+		var protonTexture = new PIXI.Texture.fromImage("flake.png");
+		var proton = new Proton();
+		var emitter = new Proton.BehaviourEmitter();
+		emitter.rate = new Proton.Rate(new Proton.Span(75, 110), new Proton.Span(.2, .5));
+		emitter.addInitialize(new Proton.Mass(5));
+		emitter.addInitialize(new Proton.ImageTarget(protonTexture));
+		emitter.addInitialize(new Proton.Life(3, 5));
+		emitter.addInitialize(new Proton.Velocity(new Proton.Span(3, 9), new Proton.Span(0, 30, true), 'polar'));
+
+		emitter.addBehaviour(new Proton.Gravity(5));
+		emitter.addBehaviour(new Proton.Scale(new Proton.Span(1, 3), 0.3));
+		emitter.addBehaviour(new Proton.Alpha(0.2, 0.5));
+		emitter.addBehaviour(new Proton.Rotate(0, Proton.getSpan(-8, 9), 'add'));
+		emitter.p.x = soon.x + soon.width/2;
+		emitter.p.y = 0;
+		emitter.emit();
+		proton.addEmitter(emitter);
+
+		emitter.addSelfBehaviour(new Proton.Gravity(2));
+		emitter.addSelfBehaviour(new Proton.RandomDrift(-width/300, height/200, .1));
+		emitter.addSelfBehaviour(new Proton.CrossZone(new Proton.RectZone(width/1.5, 100, 953, 610), 'bound'));
+
+		//particle motion
+    function transformSprite(particleSprite, particle) {
+				particleSprite.position.x = particle.p.x;
+				particleSprite.position.y = particle.p.y;
+				particleSprite.scale.x = particle.scale;
+				particleSprite.scale.y = particle.scale;
+				particleSprite.anchor.x = 0.5;
+				particleSprite.anchor.y = 0.5;
+				particleSprite.alpha = particle.alpha;
+				particleSprite.rotation = particle.rotation * Math.PI / 180;
+			}
+
+		//bind proton to pixi renderer
+    function createRender(pixiRenderer, pixiContainer) {
+			counter = 0;
+				var protonRenderer = new Proton.Renderer('other', proton);
+
+				//this might be useful in future
+        //protonRenderer.onProtonUpdate = function() {};
+
+				protonRenderer.onParticleCreated = function(particle) {
+					var particleSprite = new PIXI.Sprite(particle.target);
+					counter++;
+					particle.sprite = particleSprite;
+					if(counter == 5) {
+						particleSprite.filters = [blurFilter1];
+						counter = 0;
+					}
+					pixiContainer.addChild(particle.sprite);
+				};
+
+				protonRenderer.onParticleUpdate = function(particle) {
+					transformSprite(particle.sprite, particle);
+				};
+
+				protonRenderer.onParticleDead = function(particle) {
+					pixiContainer.removeChild(particle.sprite);
+				};
+
+				protonRenderer.start();
+		}
+
+    createRender(pixiRenderer, pixiContainer);
+
+		//loop counter
+		var count = 0;
+
+		// call game loop
+		requestAnimationFrame(gameloop);
+
+		//create game loop
+		function gameloop() {
+
+			//computation friendly resize
+			count+= 0.005;
+
+		  //resizing
+			var nwidth = window.innerWidth;
+			var nheight = window.innerHeight;
+
+			if(Math.abs(nwidth - width) > 50 || Math.abs(nheight - height) > 50 ){
+				height = nheight;
+				width = nwidth;
+
+				//realignment
+				author.x = width * 0.65;
+				author.y = height / 2.15;
+
+				soon.x = width * 0.55;
+				soon.y = height / 4;
+
+				pixiRenderer.resize(width,height);
+			}
+
+			var blurAmount = Math.cos(count) ;
+    	var blurAmount2 = Math.sin(count) ;
+    	blurFilter1.blur = 30 * (blurAmount);
+    	blurFilter2.blur = 15 * (blurAmount2);
+
+      //update particle system
+      proton.update();
+
+			// render the container
+			pixiRenderer.render(pixiContainer);
+
+			requestAnimationFrame(gameloop);
+		}
+		</script>
+	</body>
+
+</html>
