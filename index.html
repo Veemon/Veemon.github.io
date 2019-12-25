@@ -1,36 +1,24 @@
 <!DOCTYPE html>
+
 <html >
 <head>
   <meta charset="UTF-8">
   <title>Russel Demos | Veemon</title>
-  <link rel="stylesheet" href="./css/firefly.css">
-  <link rel="stylesheet" href="./css/button.css">
-  <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+  <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
-  <canvas id="c"></canvas>
-  <div class="test">
-    <div class="wrap">
-
-      <nav class="show-mobile">
-        <a class="btn-1" href="https://github.com/Veemon">Github</a>
-        <a class="btn-1" href="https://www.instagram.com/capn.russel/">Photos</a>
-        <a class="btn-1" href="https://soundcloud.com/russel-demos">Music</a>
-        <a class="btn-1" href="https://russeldemos.deviantart.com/gallery/">Art</a>
-      </nav>
-      
-      <nav class="hide-mobile">
-        <a class="btn-1" href="https://github.com/Veemon">Engineering</a>
-        <a class="btn-1" href="https://www.instagram.com/capn.russel/">Photography</a>
-        <a class="btn-1" href="https://soundcloud.com/russel-demos">Music</a>
-        <a class="btn-1" href="https://russeldemos.deviantart.com/gallery/">Art</a>
-      </nav>
-
-    </div>
+  <a class="btn-1 back"  href="#" id="back-button">Back</a>
+  <div class="button-box" id="interaction-box">
+    <a class="btn-1 hide_show" href="#" id="interaction-button">Interact</a>
+    <a class="btn-1 hide_show" href="https://github.com/Veemon">Software</a>
+    <a class="btn-1 hide_show" href="https://www.instagram.com/capn.russel/">Photos</a>
+    <a class="btn-1 hide_show" href="https://soundcloud.com/russel-demos">Music</a>
+    <a class="btn-1 hide_show" href="https://russeldemos.deviantart.com/gallery/">Art</a>
+    <p id="no-webgl">Couldn't find any of this WebGL stuff :(</p>
   </div>
-  <script src='js/kzymdn.js'></script>
-  <script src="js/firefly.js"></script>
-  <script src="js/button.js"></script>
+  <canvas></canvas>
+  <script src="dist/main.js"></script>
 </body>
 </html>
+

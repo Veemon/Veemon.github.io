@@ -1,0 +1,142 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400|Raleway:300);
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+html {
+  font-family: 'Open Sans', Helvetica, arial, sans-serif;
+  font-size: calc(70px - 2vw);
+  text-align: center;
+  text-shadow: 0px 0px 4px #080808, 0px 0px 8px #000000,;
+  background-color: #080808;
+}
+
+@media screen and (min-width: 1450px) {
+  html {
+     font-size: 28px;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  html {
+     font-size: 28px;
+  }
+}
+
+html *,
+html *:before,
+html *:after {
+  box-sizing: border-box;
+  -webkit-transition: 0.5s ease-in-out;
+  transition: 0.5s ease-in-out;
+}
+html i, html em,
+html b, html strong,
+html span {
+  -webkit-transition: none;
+  transition: none;
+}
+
+*:before,
+*:after {
+  z-index: -1;
+}
+
+canvas {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  line-height: 80px;
+  color: black;
+}
+
+.button-box {
+  min-width: 500px;
+  padding-top: 26vh;
+  padding-left: 45.5vw;
+  position: absolute;
+  /*background-color: white;*/
+}
+
+@media screen and (min-width: 1000px) and (max-width: 1450px) {
+  .button-box {
+     padding-left: 41.5vw;
+     /*background-color: red;*/
+  }
+}
+
+
+@media screen and (min-width: 750px) and (max-width: 1000px){
+  .button-box {
+     padding-top: 25vh;
+     padding-left: 38.5vw;
+     /*background-color: green;*/
+  }
+}
+
+@media screen and (max-width: 750px){
+  .button-box {
+     padding-top: 22vh;
+     padding-left: 35vw;
+     /*background-color: blue;*/
+  }
+}
+
+[class^="btn-"] {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  height: 80px;
+  min-width: 250px;
+  max-width: 250px;
+  margin: 1rem auto;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+.btn-1 {
+  color: #eedddd;
+}
+.btn-1:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -50px;
+  bottom: 0;
+  left: 0;
+  filter: drop-shadow(0px 20px 8px #1a1a1a);
+  border-right: 50px solid transparent;
+  border-bottom: 80px solid rgba(255,255,255,0.1);
+  -webkit-transform: translateX(-100%);
+          transform: translateX(-100%);
+}
+.btn-1:hover {
+  color: #ffffff;
+}
+.btn-1:hover:before {
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+}
+
+.hide_show {
+  opacity: 1;
+  transition: opacity 750ms;
+}
+
+.back {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1250ms;
+  color: #dddddd;
+  position: absolute;
+  left: 1vw;
+  bottom: 0vh;
+}
