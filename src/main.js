@@ -1172,15 +1172,12 @@ function backup_main() {
 }
 
 function can_render() {
-    if (!document.WebGL2RenderingContext) {
-        var canvas = document.createElement("canvas");
-        if (canvas.getContext('webgl2')) {
-            document.getElementById("no-webgl").remove();
-            return webgl_main(canvas);
-        }
-        canvas.remove();
+    var canvas = document.createElement("canvas");
+    if (canvas.getContext("webgl") || canvas.getContext("experimental-webgl") || canvas.getContext("webgl2")) {
+        document.getElementById("no-webgl").remove();
+        return webgl_main(canvas);
     }
-
+    canvas.remove();
     backup_main();
 }
 
