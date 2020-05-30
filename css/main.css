@@ -7,10 +7,11 @@ body {
 
 html {
   font-family: 'Open Sans', Helvetica, arial, sans-serif;
-  font-size: calc(70px - 2vw);
+  font-size: calc(70px - 1.5vw);
   text-align: center;
   text-shadow: 0px 0px 4px #080808, 0px 0px 8px #000000,;
   background-color: #080808;
+  transition: ease-in-out 0.8s 0.1s
 }
 
 @media screen and (min-width: 1450px) {
@@ -25,13 +26,6 @@ html {
   }
 }
 
-html *,
-html *:before,
-html *:after {
-  box-sizing: border-box;
-  -webkit-transition: 0.5s ease-in-out;
-  transition: 0.5s ease-in-out;
-}
 html i, html em,
 html b, html strong,
 html span {
@@ -58,34 +52,43 @@ a {
 }
 
 .button-box {
-  min-width: 500px;
+  min-width: 450px;
   padding-top: 26vh;
-  padding-left: 45.5vw;
+  padding-left: 37.5vw;
   position: absolute;
-  /*background-color: white;*/
+  /* background-color: blue;*/
+  transition: ease-in-out 1.8s 0.1s;
 }
 
-@media screen and (min-width: 1000px) and (max-width: 1450px) {
+@media screen and (min-width: 1650px){
   .button-box {
-     padding-left: 41.5vw;
-     /*background-color: red;*/
+    padding-top: 26vh;
+    padding-left: 39.5vw;
+    /* background-color: yellow;*/
   }
 }
 
-
-@media screen and (min-width: 750px) and (max-width: 1000px){
+@media screen and (min-width: 1500px) and (max-width: 1650px) {
   .button-box {
-     padding-top: 25vh;
-     padding-left: 38.5vw;
-     /*background-color: green;*/
+    padding-top: 22vh;
+    padding-left: 34.5vw;
+    /* background-color: red;*/
   }
 }
 
-@media screen and (max-width: 750px){
+@media screen and (min-width: 1350px) and (max-width: 1500px) {
   .button-box {
-     padding-top: 22vh;
-     padding-left: 35vw;
-     /*background-color: blue;*/
+    padding-top: 22vh;
+    padding-left: 29.5vw;
+    /* background-color: green;*/
+  }
+}
+
+@media screen and (min-width: 950px) and (max-width: 1350px) {
+  .button-box {
+    padding-top: 22vh;
+    padding-left: 14vw;
+    /* background-color: pink;*/
   }
 }
 
@@ -139,4 +142,59 @@ a {
   position: absolute;
   left: 1vw;
   bottom: 0vh;
+}
+
+
+
+/* If you know, you know */
+.fade-in {
+  opacity: 0;
+  animation:         fadeIn cubic-bezier(1,-0.31,.48,1.01) 1.0s 1.5s forwards;
+  -webkit-animation: fadeIn cubic-bezier(1,-0.31,.48,1.01) 1.0s 1.5s forwards;
+  -moz-animation:    fadeIn cubic-bezier(1,-0.31,.48,1.01) 1.0s 1.5s forwards;
+  -o-animation:      fadeIn cubic-bezier(1,-0.31,.48,1.01) 1.0s 1.5s forwards;
+  -ms-animation:     fadeIn cubic-bezier(1,-0.31,.48,1.01) 1.0s 1.5s forwards;
+}
+@keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
 }

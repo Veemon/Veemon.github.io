@@ -3,6 +3,7 @@ import "three/OrbitControls";
 import "three/EffectComposer";
 import "three/LuminosityHighPassShader";
 import "three/CopyShader";
+import "three/FXAAShader"
 import "three/RenderPass";
 import "three/ShaderPass";
 import "three/UnrealBloomPass";
@@ -217,7 +218,7 @@ function webgl_main() {
                 "active": true,
                 "setup": 150.0,
                 "node": 450.0,
-                "edge": 400.0,
+                "edge": 550.0,
             },
 
             "slow": {
@@ -268,7 +269,7 @@ function webgl_main() {
             "node": {
                 "radius": 0.0120,
                 "segments": 8,
-                "culling": 0.100,
+                "culling": 0.200,
             },
 
             "edge": {
@@ -282,7 +283,7 @@ function webgl_main() {
 
                     "fine": {
                         "active": true,
-                        "value": 0.92,
+                        "value": 0.93,
                     },
                 },
             },
@@ -290,9 +291,13 @@ function webgl_main() {
 
         "bloom": {
             "active": true,
-            "strength": 0.900,
+            "strength": 0.910,
             "radius": 0.025,
             "threshold": 0.315,
+        },
+
+        "fxaa": {
+            "active": true,
         },
     };
 
@@ -357,7 +362,10 @@ function webgl_main() {
     console.log("mobile: ", is_mobile);
     if (is_mobile) {
         settings.bloom.active = false;
+        settings.fxaa.active = false;
+
         color_clear.multiplyScalar(0.5);
+
         settings.colors.background = color_clear.getHex();
         settings.colors.node.low *= 0.5;
         settings.colors.edge.low *= 0.5;
@@ -374,6 +382,12 @@ function webgl_main() {
     var camera          = new THREE.PerspectiveCamera(settings.camera.fov, 1.0, 0.001, 1000);
     var controls        = new THREE.OrbitControls(camera, canvas);
     var composer        = new THREE.EffectComposer(color_renderer);
+
+    color_renderer.getContext().canvas.addEventListener("webglcontextlost", function(event) {
+        console.log("[Error] WebGL Context lost, re-intializing scene.");
+        return can_render();
+    });
+
 
 
 
@@ -399,6 +413,7 @@ function webgl_main() {
 
     var render_pass;
     var bloom_pass;
+    var fxaa_pass;
 
 
 
@@ -595,6 +610,7 @@ function webgl_main() {
                 composer.setSize(local_width, local_height);
                 composer.addPass(render_pass);
                 if (settings.bloom.active) composer.addPass(bloom_pass);
+                if (settings.fxaa.active)  composer.addPass(fxaa_pass);
             });
             
             gf.add(settings.bloom, "strength", 0.0, 2.0, 0.01).onChange((val) => {
@@ -607,6 +623,16 @@ function webgl_main() {
             
             gf.add(settings.bloom, "threshold", 0.0, 1.5, 0.01).onChange((val) => {
                 bloom_pass.threshold = val;
+            });
+
+        var gf = gui.addFolder("FXAA");
+            gf.add(settings.fxaa, "active").onChange((val) => {
+                composer = new THREE.EffectComposer(color_renderer);
+                composer.setPixelRatio(window.devicePixelRatio);
+                composer.setSize(local_width, local_height);
+                composer.addPass(render_pass);
+                if (settings.bloom.active) composer.addPass(bloom_pass);
+                if (settings.fxaa.active)  composer.addPass(fxaa_pass);
             });
     }
 
@@ -673,10 +699,15 @@ function webgl_main() {
             settings.bloom.threshold,
         )
 
+        fxaa_pass = new THREE.ShaderPass(THREE.FXAAShader);
+        fxaa_pass.material.uniforms['resolution'].value.x = 1 / ( local_width  * window.devicePixelRatio );
+        fxaa_pass.material.uniforms['resolution'].value.y = 1 / ( local_height * window.devicePixelRatio );
+
         composer.setPixelRatio(window.devicePixelRatio);
         composer.setSize(local_width, local_height);
         composer.addPass(render_pass);
         if (settings.bloom.active) composer.addPass(bloom_pass);
+        if (settings.fxaa.active)  composer.addPass(fxaa_pass);
     };
 
 
@@ -1032,6 +1063,11 @@ function webgl_main() {
                 composer.setSize(local_width, local_height);
                 composer.addPass(render_pass);
                 composer.addPass(bloom_pass);
+
+                fxaa_pass.material.uniforms['resolution'].value.x = 1 / ( local_width  * window.devicePixelRatio );
+                fxaa_pass.material.uniforms['resolution'].value.y = 1 / ( local_height * window.devicePixelRatio );
+
+                if (settings.fxaa.active)  composer.addPass(fxaa_pass);
             }
         }
 
@@ -1166,19 +1202,21 @@ function backup_main() {
 
     var text = document.getElementById("no-webgl");
     text.style.zIndex = 2;
-    test.style.color = "red";
-    test.style.fontStyle = "italic";
-    test.style.fontSize = "15px";
+    text.style.color = "red";
+    text.style.fontStyle = "italic";
+    text.style.fontSize = "15px";
+    text.style.opacity = 1;
 }
 
 function can_render() {
     var canvas = document.createElement("canvas");
     if (canvas.getContext("webgl") || canvas.getContext("experimental-webgl") || canvas.getContext("webgl2")) {
-        document.getElementById("no-webgl").remove();
+        document.getElementById("no-webgl").style.opacity = 0;
         return webgl_main(canvas);
     }
     canvas.remove();
     backup_main();
 }
+
 
 can_render();

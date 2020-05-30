@@ -16,6 +16,7 @@ module.exports = {
             "three/LuminosityHighPassShader": path.join(__dirname, _target + "shaders/LuminosityHighPassShader.js"),
             "three/Bokeh2Shader":             path.join(__dirname, _target + "shaders/BokehShader2.js"),
             "three/CopyShader":               path.join(__dirname, _target + "shaders/CopyShader.js"),
+            "three/FXAAShader":               path.join(__dirname, _target + "shaders/FXAAShader.js"),
             "three/RenderPass":               path.join(__dirname, _target + "postprocessing/RenderPass.js"),
             "three/ShaderPass":               path.join(__dirname, _target + "postprocessing/ShaderPass.js"),
             "three/UnrealBloomPass":          path.join(__dirname, _target + "postprocessing/UnrealBloomPass.js"),
