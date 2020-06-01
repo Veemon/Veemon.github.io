@@ -3,7 +3,7 @@ import "three/OrbitControls";
 import "three/EffectComposer";
 import "three/LuminosityHighPassShader";
 import "three/CopyShader";
-import "three/FXAAShader"
+import "three/SSAARenderPass"
 import "three/RenderPass";
 import "three/ShaderPass";
 import "three/UnrealBloomPass";
@@ -294,10 +294,12 @@ function webgl_main() {
             "strength": 0.910,
             "radius": 0.025,
             "threshold": 0.315,
+            "factor": 2,
         },
 
-        "fxaa": {
+        "aa": {
             "active": true,
+            "sample_level": 4
         },
     };
 
@@ -362,7 +364,7 @@ function webgl_main() {
     console.log("mobile: ", is_mobile);
     if (is_mobile) {
         settings.bloom.active = false;
-        settings.fxaa.active = false;
+        settings.aa.active = false;
 
         color_clear.multiplyScalar(0.5);
 
@@ -413,7 +415,7 @@ function webgl_main() {
 
     var render_pass;
     var bloom_pass;
-    var fxaa_pass;
+    var aa_pass;
 
 
 
@@ -528,6 +530,7 @@ function webgl_main() {
         gf.addColor(settings.colors, "background").onChange((val) => {
             color_clear.set(settings.colors.background);
             color_renderer.setClearColor(color_clear, 1.0);
+            aa_pass.clearColor = color_clear;
         });
 
         var gff = gf.addFolder("Node");
@@ -609,8 +612,8 @@ function webgl_main() {
                 composer.setPixelRatio(window.devicePixelRatio);
                 composer.setSize(local_width, local_height);
                 composer.addPass(render_pass);
+                if (settings.aa.active)  composer.addPass(aa_pass);
                 if (settings.bloom.active) composer.addPass(bloom_pass);
-                if (settings.fxaa.active)  composer.addPass(fxaa_pass);
             });
             
             gf.add(settings.bloom, "strength", 0.0, 2.0, 0.01).onChange((val) => {
@@ -625,14 +628,24 @@ function webgl_main() {
                 bloom_pass.threshold = val;
             });
 
-        var gf = gui.addFolder("FXAA");
-            gf.add(settings.fxaa, "active").onChange((val) => {
+        var gf = gui.addFolder("AntiAlias");
+            gf.add(settings.aa, "active").onChange((val) => {
                 composer = new THREE.EffectComposer(color_renderer);
                 composer.setPixelRatio(window.devicePixelRatio);
                 composer.setSize(local_width, local_height);
                 composer.addPass(render_pass);
+                if (settings.aa.active)  composer.addPass(aa_pass);
                 if (settings.bloom.active) composer.addPass(bloom_pass);
-                if (settings.fxaa.active)  composer.addPass(fxaa_pass);
+            });
+            gf.add(settings.aa, "sample_level", {
+                "1": 1,
+                "2": 2,
+                "4": 3,
+                "8": 4,
+                "16": 5,
+                "32": 6,
+            }).onChange((val) => {
+                aa_pass.sampleLevel = settings.aa.sample_level;
             });
     }
 
@@ -692,22 +705,23 @@ function webgl_main() {
 
         render_pass = new THREE.RenderPass(scene, camera);
 
+        aa_pass = new THREE.SSAARenderPass(scene, camera);
+        aa_pass.sampleLevel = settings.aa.sample_level;
+        aa_pass.clearColor  = color_clear;
+        aa_pass.clearAlpha  = 1.0;
+
         bloom_pass = new THREE.UnrealBloomPass(
-            new THREE.Vector2( local_width, local_height),
+            new THREE.Vector2( local_width * settings.bloom.factor, local_height * settings.bloom.factor),
             settings.bloom.strength,
             settings.bloom.radius,
             settings.bloom.threshold,
         )
 
-        fxaa_pass = new THREE.ShaderPass(THREE.FXAAShader);
-        fxaa_pass.material.uniforms['resolution'].value.x = 1 / ( local_width  * window.devicePixelRatio );
-        fxaa_pass.material.uniforms['resolution'].value.y = 1 / ( local_height * window.devicePixelRatio );
-
         composer.setPixelRatio(window.devicePixelRatio);
         composer.setSize(local_width, local_height);
         composer.addPass(render_pass);
+        if (settings.aa.active)  composer.addPass(aa_pass);
         if (settings.bloom.active) composer.addPass(bloom_pass);
-        if (settings.fxaa.active)  composer.addPass(fxaa_pass);
     };
 
 
@@ -1052,7 +1066,7 @@ function webgl_main() {
 
             if (settings.bloom.active) {
                 bloom_pass = new THREE.UnrealBloomPass(
-                    new THREE.Vector2( local_width, local_height),
+                    new THREE.Vector2( local_width * settings.bloom.factor, local_height * settings.bloom.factor),
                     settings.bloom.strength,
                     settings.bloom.radius,
                     settings.bloom.threshold,
@@ -1062,12 +1076,8 @@ function webgl_main() {
                 composer.setPixelRatio(window.devicePixelRatio);
                 composer.setSize(local_width, local_height);
                 composer.addPass(render_pass);
-                composer.addPass(bloom_pass);
-
-                fxaa_pass.material.uniforms['resolution'].value.x = 1 / ( local_width  * window.devicePixelRatio );
-                fxaa_pass.material.uniforms['resolution'].value.y = 1 / ( local_height * window.devicePixelRatio );
-
-                if (settings.fxaa.active)  composer.addPass(fxaa_pass);
+                if (settings.aa.active)  composer.addPass(aa_pass);
+                if (settings.bloom.active) composer.addPass(bloom_pass);
             }
         }
 
