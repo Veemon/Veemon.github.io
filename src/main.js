@@ -1206,9 +1206,12 @@ function webgl_main() {
 }
 
 function backup_main() {
+    console.log("[Info] Could not find webgl hints.");
+
     var gui_interact = document.getElementById("interaction-button");
     gui_interact.style.pointerEvents = "none";
-    gui_interact.style.opacity = 0.5;
+    gui_interact.style.class = "none";
+    gui_interact.style.webkitAnimationPlayState = "paused";
 
     var text = document.getElementById("no-webgl");
     text.style.zIndex = 2;
