@@ -80,8 +80,8 @@ a {
 
 .button-box {
   min-width: 750px;
-  padding-top: 20vh;
-  padding-left: 13vw;
+  padding-top: 8vh;
+  padding-left: 8vw;
   position: absolute;
   /* background-color: blue;*/
   transition: ease-in-out 0.6s;
@@ -89,21 +89,35 @@ a {
 
 
 
-
-
-@media screen and (min-width: 1950px){
+@media screen and (min-width: 2400px) {
   .button-box {
     padding-top: 26vh;
-    padding-left: 36.5vw;
-    /* background-color: yellow;*/
+    padding-left: 38vw;
+    /* background-color: teal; */
+  }
+}
+
+@media screen and (min-width: 2400px) and (max-width: 2400px) {
+  .button-box {
+    padding-top: 26vh;
+    padding-left: 36vw;
+    /* background-color: gray; */
+  }
+}
+
+@media screen and (min-width: 1950px) and (max-width: 2400px) {
+  .button-box {
+    padding-top: 26vh;
+    padding-left: 34vw;
+    /* background-color: yellow; */
   }
 }
 
 @media screen and (min-width: 1750px) and (max-width: 1950px) {
   .button-box {
     padding-top: 22vh;
-    padding-left: 32.5vw;
-    /* background-color: purple;*/
+    padding-left: 30vw;
+    /* background-color: purple; */
   }
 }
 
@@ -111,7 +125,7 @@ a {
   .button-box {
     padding-top: 18vh;
     padding-left: 27vw;
-    /* background-color: red;*/
+    /* background-color: red; */
   }
 }
 
@@ -119,23 +133,23 @@ a {
   .button-box {
     padding-top: 15vh;
     padding-left: 25vw;
-    /* background-color: green;*/
+    /* background-color: green; */
   }
 }
 
 @media screen and (min-width: 1100px) and (max-width: 1350px) {
   .button-box {
     padding-top: 12vh;
-    padding-left: 22.5vw;
-    /* background-color: orange;*/
+    padding-left: 20vw;
+    /* background-color: orange; */
   }
 }
 
 @media screen and (min-width: 950px) and (max-width: 1100px) {
   .button-box {
     padding-top: 8vh;
-    padding-left: 11.5vw;
-    /* background-color: pink;*/
+    padding-left: 14vw;
+    /* background-color: pink; */
   }
 }
 
