@@ -230,9 +230,9 @@ function webgl_main() {
         },
 
         "camera": {
-            "fov": 80,
+            "fov": 70,
             "y": 0.15,
-            "z": 2.50,
+            "z": 6.00,
             "speed": 0.35,
             "exposure": 0.700,
         },
@@ -299,12 +299,12 @@ function webgl_main() {
 
         "aa": {
             "active": true,
-            "sample_level": 4
+            "sample_level": 16
         },
     };
 
     function generate_pallette() {
-        let pallette_blue = {
+        settings._pallette_blue = {
             "background": 0x0e1a1e,
 
             "node": {
@@ -322,7 +322,7 @@ function webgl_main() {
             },
         };
 
-        let pallette_orange = {
+        settings._pallette_orange = {
             "background": 0x14120f,
 
             "node": {
@@ -340,11 +340,74 @@ function webgl_main() {
             },
         };
 
-        settings.colors = (Math.random() < 0.5) ? pallette_blue : pallette_orange;
+        settings._pallette_monochrome = {
+            "background": 0x1b1b1b,
+
+            "node": {
+                "low": 0.060,
+                "high": 1.000,
+                "main": 0xcacaca,
+                "mix": 0.0,
+            },
+
+            "edge": {
+                "low": 0.020,
+                "high": 0.800,
+                "main": 0x757575,
+                "mix": 0.0,
+            },
+        };
+
+        settings._pallette_christmas_gift = {
+            "background": 0x390e0e,
+
+            "node": {
+                "low": 0.060,
+                "high": 1.000,
+                "main": 0xffffff,
+                "mix": 0.3,
+            },
+
+            "edge": {
+                "low": 0.040,
+                "high": 0.800,
+                "main": 0xffffff,
+                "mix": 0.3,
+            },
+        };
+
+        settings._pallette_matrix = {
+            "background": 0x000000,
+
+            "node": {
+                "low": 0.170,
+                "high": 1.000,
+                "main": 0x00ff0f,
+                "mix": 0.0,
+            },
+
+            "edge": {
+                "low": 0.090,
+                "high": 1.000,
+                "main": 0x00ff2d,
+                "mix": 0.0,
+            },
+        };
+
+    }
+
+    function pick_pallette() {
+        let p = Math.random();
+        settings.colors = {}
+        settings.colors = (p >= 0.0 && p < 0.2) ? settings._pallette_blue           : settings.colors;
+        settings.colors = (p >= 0.2 && p < 0.4) ? settings._pallette_orange         : settings.colors;
+        settings.colors = (p >= 0.4 && p < 0.6) ? settings._pallette_monochrome     : settings.colors;
+        settings.colors = (p >= 0.6 && p < 0.8) ? settings._pallette_christmas_gift : settings.colors;
+        settings.colors = (p >= 0.8 && p < 1.0) ? settings._pallette_matrix         : settings.colors;
     }
     
     generate_pallette();
-
+    pick_pallette();
 
 
     // set up intermediates
@@ -391,6 +454,25 @@ function webgl_main() {
     });
 
 
+
+    // find out if in display mode
+    let display_mode_active = (window.location.search.substr(1) === '1');
+    if (display_mode_active) {
+
+        var gui_button_box = document.getElementById("interaction-box");
+        gui_button_box.style.opacity = 0;
+
+        setInterval(() => {
+            pick_pallette(); 
+
+            color_clear.set(settings.colors.background);
+            color_renderer.setClearColor(color_clear, 1.0);
+            aa_pass.clearColor = color_clear;
+
+            gui_build_shaders();
+            gui_set_scene_rebuild();
+        }, 30000);
+    }
 
 
 
