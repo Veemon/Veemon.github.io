@@ -399,6 +399,10 @@ function webgl_main() {
     var is_mobile = ('ontouchstart' in document.documentElement) && /Mobi/.test(navigator.userAgent);
     console.log("mobile: ", is_mobile);
 
+    if (is_mobile) {
+        settings.camera.fov = 50;
+    }
+
     function pick_pallette() {
         let p = Math.random();
         settings.colors = {}
@@ -764,11 +768,7 @@ function webgl_main() {
     function init_scene() {
         local_width  = window.screen.availWidth;
         local_height = window.screen.availHeight;
-        if (!is_mobile) {
-            local_ratio = local_width / local_height;
-        } else {
-            local_ratio = local_height / local_width;
-        }
+        local_ratio  = local_width / local_height;
 
         color_renderer.autoClear = false;
         color_renderer.setClearColor(color_clear, 1.0);
