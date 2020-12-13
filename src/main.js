@@ -764,7 +764,11 @@ function webgl_main() {
     function init_scene() {
         local_width  = window.screen.availWidth;
         local_height = window.screen.availHeight;
-        local_ratio  = local_width / local_height;
+        if (!is_mobile) {
+            local_ratio = local_width / local_height;
+        } else {
+            local_ratio = local_height / local_width;
+        }
 
         color_renderer.autoClear = false;
         color_renderer.setClearColor(color_clear, 1.0);
