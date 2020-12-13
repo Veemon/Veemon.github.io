@@ -258,11 +258,10 @@ function webgl_main() {
         "scene": {
             "grid": {
                 "subdivisions": 4,
-                "spread": 0.6, 
+                "spread": 0.8, 
                 "range": {
                     "min": 1.3,
                     "max": 1.8,
-                    "mobile_offset": 0.3,
                 }
             },
 
@@ -292,7 +291,8 @@ function webgl_main() {
         "bloom": {
             "active": true,
             "strength": 0.910,
-            "radius": 0.025,
+            // "radius": 0.025,
+            "radius": 0.7,
             "threshold": 0.315,
             "factor": 2,
         },
@@ -305,25 +305,25 @@ function webgl_main() {
 
     function generate_pallette() {
         settings._pallette_blue = {
-            "background": 0x0e1a1e,
+            "background": 0x1b2426,
 
             "node": {
                 "low": 0.030,
                 "high": 1.000,
-                "main": 0x00ffff,
-                "mix": 0.4,
+                "main": 0x3fffff,
+                "mix": 0.1,
             },
 
             "edge": {
                 "low": 0.010,
                 "high": 0.920,
                 "main": 0x00aee6,
-                "mix": 0.25, 
+                "mix": 0.1, 
             },
         };
 
         settings._pallette_orange = {
-            "background": 0x14120f,
+            "background": 0x1b1b1b,
 
             "node": {
                 "low": 0.060,
@@ -358,52 +358,55 @@ function webgl_main() {
             },
         };
 
-        settings._pallette_christmas_gift = {
-            "background": 0x390e0e,
-
-            "node": {
-                "low": 0.060,
-                "high": 1.000,
-                "main": 0xffffff,
-                "mix": 0.3,
-            },
-
-            "edge": {
-                "low": 0.040,
-                "high": 0.800,
-                "main": 0xffffff,
-                "mix": 0.3,
-            },
-        };
-
         settings._pallette_matrix = {
-            "background": 0x000000,
+            "background": 0x1b1b1b,
 
             "node": {
-                "low": 0.170,
+                "low": 0.30,
                 "high": 1.000,
-                "main": 0x00ff0f,
+                "main": 0x3fff3f,
                 "mix": 0.0,
             },
 
             "edge": {
-                "low": 0.090,
+                "low": 0.020,
                 "high": 1.000,
                 "main": 0x00ff2d,
                 "mix": 0.0,
             },
         };
 
+        settings._pallette_rainbow = {
+            "background": 0x1b1b1b,
+
+            "node": {
+                "low": 0.1,
+                "high": 1.000,
+                "main": 0xff0000,
+                "mix": 1.0,
+            },
+
+            "edge": {
+                "low": 0.010,
+                "high": 1.000,
+                "main": 0xff0000,
+                "mix": 1.0,
+            },
+        };
+
     }
+
+    var is_mobile = ('ontouchstart' in document.documentElement) && /Mobi/.test(navigator.userAgent);
+    console.log("mobile: ", is_mobile);
 
     function pick_pallette() {
         let p = Math.random();
         settings.colors = {}
-        settings.colors = (p >= 0.0 && p < 0.2) ? settings._pallette_blue           : settings.colors;
-        settings.colors = (p >= 0.2 && p < 0.4) ? settings._pallette_orange         : settings.colors;
-        settings.colors = (p >= 0.4 && p < 0.6) ? settings._pallette_monochrome     : settings.colors;
-        settings.colors = (p >= 0.6 && p < 0.8) ? settings._pallette_christmas_gift : settings.colors;
-        settings.colors = (p >= 0.8 && p < 1.0) ? settings._pallette_matrix         : settings.colors;
+        settings.colors = (p >= 0.00 && p < 0.50) ? settings._pallette_monochrome : settings.colors;
+        settings.colors = (p >= 0.50 && p < 0.65) ? settings._pallette_blue       : settings.colors;
+        settings.colors = (p >= 0.65 && p < 0.80) ? settings._pallette_orange     : settings.colors;
+        settings.colors = (p >= 0.80 && p < 0.95) ? settings._pallette_matrix     : settings.colors;
+        settings.colors = (p >= 0.95 && p < 1.00) ? settings._pallette_rainbow    : settings.colors;
     }
     
     generate_pallette();
@@ -423,18 +426,16 @@ function webgl_main() {
 
     var color_clear = new THREE.Color(settings.colors.background);
 
-    var is_mobile = ('ontouchstart' in document.documentElement) && /Mobi/.test(navigator.userAgent);
-    console.log("mobile: ", is_mobile);
     if (is_mobile) {
         settings.bloom.active = false;
         settings.aa.active = false;
 
-        color_clear.multiplyScalar(0.5);
+        //color_clear.multiplyScalar(0.5);
 
         settings.colors.background = color_clear.getHex();
         settings.colors.node.low *= 0.5;
         settings.colors.edge.low *= 0.5;
-        settings.scene.edge.culling.fine.value *= 1.02;
+        settings.scene.edge.culling.fine.value *= 1.01;
     }
                                       
 
@@ -777,7 +778,7 @@ function webgl_main() {
         if (!is_mobile) {
             camera.position.set(0, settings.camera.y, settings.camera.z);
         } else {
-            camera.position.set(0, settings.camera.y + 0.1, settings.camera.z / 1.2);
+            camera.position.set(0, settings.camera.y, settings.camera.z * 0.5);
         }
         camera.lookAt(0,0,0);
 
@@ -938,8 +939,6 @@ function webgl_main() {
             let x = (x_portion * i) - x_range + (Math.random() * 2 - 1)*settings.scene.grid.spread;
             let y = (y_portion * j) - y_range + (Math.random() * 2 - 1)*settings.scene.grid.spread;
             let z = (z_portion * k) - z_range + (Math.random() * 2 - 1)*settings.scene.grid.spread;
-
-            if (is_mobile) y -= settings.scene.grid.range.mobile_offset;
 
             nodes[it] = {};
             nodes[it]["connections"] = {};
