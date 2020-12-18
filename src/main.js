@@ -230,9 +230,9 @@ function webgl_main() {
         },
 
         "camera": {
-            "fov": 70,
+            "fov": 60,
             "y": 0.15,
-            "z": 6.00,
+            "z": 5.50,
             "speed": 0.35,
             "exposure": 0.700,
         },
@@ -260,8 +260,8 @@ function webgl_main() {
                 "subdivisions": 4,
                 "spread": 0.8, 
                 "range": {
-                    "min": 1.3,
-                    "max": 1.8,
+                    "min": 0.5,
+                    "max": 1.5,
                 }
             },
 
@@ -400,7 +400,8 @@ function webgl_main() {
     console.log("mobile: ", is_mobile);
 
     if (is_mobile) {
-        settings.camera.fov = 50;
+        // FIXME hardcoded
+        settings.camera.fov = 55;
     }
 
     function pick_pallette() {
@@ -766,8 +767,8 @@ function webgl_main() {
 
 
     function init_scene() {
-        local_width  = window.screen.availWidth;
-        local_height = window.screen.availHeight;
+        local_width  = window.screen.innerWidth;
+        local_height = window.screen.innerHeight;
         local_ratio  = local_width / local_height;
 
         color_renderer.autoClear = false;
@@ -782,7 +783,8 @@ function webgl_main() {
         if (!is_mobile) {
             camera.position.set(0, settings.camera.y, settings.camera.z);
         } else {
-            camera.position.set(0, settings.camera.y, settings.camera.z * 0.5);
+            // FIXME: hardcoded
+            camera.position.set(0, settings.camera.y, 0.35);
         }
         camera.lookAt(0,0,0);
 
@@ -879,11 +881,14 @@ function webgl_main() {
 
     function init_system() {
         // nodes -----------------------
-        let portrait = local_width < local_height;
+        x_range = settings.scene.grid.range.max;
+        y_range = settings.scene.grid.range.max;
+        z_range = settings.scene.grid.range.max;
 
-        x_range = (!portrait) ? settings.scene.grid.range.max : settings.scene.grid.range.min;
-        y_range = (!portrait) ? settings.scene.grid.range.max : settings.scene.grid.range.min;
-        z_range = (!portrait) ? settings.scene.grid.range.max : settings.scene.grid.range.min;
+        if (is_mobile) {
+            x_range = settings.scene.grid.range.min;
+            y_range = settings.scene.grid.range.min;
+        }
 
         n_nodes = settings.scene.grid.subdivisions * settings.scene.grid.subdivisions * settings.scene.grid.subdivisions;
         n_edges = (n_nodes * (n_nodes-1)) / 2;
