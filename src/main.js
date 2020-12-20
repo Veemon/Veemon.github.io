@@ -724,14 +724,7 @@ function webgl_main() {
                 if (settings.aa.active)  composer.addPass(aa_pass);
                 if (settings.bloom.active) composer.addPass(bloom_pass);
             });
-            gf.add(settings.aa, "sample_level", {
-                "1": 1,
-                "2": 2,
-                "4": 3,
-                "8": 4,
-                "16": 5,
-                "32": 6,
-            }).onChange((val) => {
+            gf.add(settings.aa, "sample_level", [1,2,4,8,16,32]).onChange((val) => {
                 aa_pass.sampleLevel = settings.aa.sample_level;
             });
     }
