@@ -299,7 +299,7 @@ function webgl_main() {
 
         "aa": {
             "active": true,
-            "sample_level": 16
+            "sample_level": 4
         },
     };
 
