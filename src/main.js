@@ -400,17 +400,31 @@ function webgl_main() {
     console.log("mobile: ", is_mobile);
 
     if (is_mobile) {
-        settings.camera.fov = 50;
+        settings.camera = {
+            "fov": 50,
+            "y": 0.15,
+            "z": 6.00,
+            "speed": 0.35,
+            "exposure": 0.700,
+        };
+    } else {
+        settings.camera = {
+            "fov": 70,
+            "y": 0.00,
+            "z": 4.00,
+            "speed": 0.35,
+            "exposure": 0.700,
+        };
     }
 
     function pick_pallette() {
         let p = Math.random();
         settings.colors = {}
-        settings.colors = (p >= 0.00 && p < 0.50) ? settings._pallette_monochrome : settings.colors;
-        settings.colors = (p >= 0.50 && p < 0.65) ? settings._pallette_blue       : settings.colors;
-        settings.colors = (p >= 0.65 && p < 0.80) ? settings._pallette_orange     : settings.colors;
-        settings.colors = (p >= 0.80 && p < 0.95) ? settings._pallette_matrix     : settings.colors;
-        settings.colors = (p >= 0.95 && p < 1.00) ? settings._pallette_rainbow    : settings.colors;
+        settings.colors = (p >= 0.00 && p < 0.40 + 1e-8) ? settings._pallette_monochrome : settings.colors;
+        settings.colors = (p >= 0.40 && p < 0.65 + 1e-8) ? settings._pallette_blue       : settings.colors;
+        settings.colors = (p >= 0.65 && p < 0.80 + 1e-8) ? settings._pallette_matrix     : settings.colors;
+        settings.colors = (p >= 0.80 && p < 0.95 + 1e-8) ? settings._pallette_orange     : settings.colors;
+        settings.colors = (p >= 0.95 && p < 1.00 + 1e-8) ? settings._pallette_rainbow    : settings.colors;
     }
     
     generate_pallette();
@@ -449,9 +463,13 @@ function webgl_main() {
     var canvas          = document.querySelector("canvas");
     var color_renderer  = new THREE.WebGLRenderer({canvas: canvas});
     var scene           = new THREE.Scene();
-    var camera          = new THREE.PerspectiveCamera(settings.camera.fov, 1.0, 0.001, 1000);
-    var controls        = new THREE.OrbitControls(camera, canvas);
-    var composer        = new THREE.EffectComposer(color_renderer);
+
+    local_width  = window.screen.availWidth;
+    local_height = window.screen.availHeight;
+    local_ratio  = local_width / local_height;
+    var camera   = new THREE.PerspectiveCamera(settings.camera.fov, local_ratio, 0.001, 1000);
+    var controls = new THREE.OrbitControls(camera, canvas);
+    var composer = new THREE.EffectComposer(color_renderer);
 
     color_renderer.getContext().canvas.addEventListener("webglcontextlost", function(event) {
         console.log("[Error] WebGL Context lost, re-intializing scene.");
@@ -791,12 +809,9 @@ function webgl_main() {
         color_renderer.setRenderTarget(null);
 
         camera.aspect = local_ratio;
-        if (!is_mobile) {
-            camera.position.set(0, settings.camera.y, settings.camera.z);
-        } else {
-            camera.position.set(0, settings.camera.y, settings.camera.z * 0.5);
-        }
+        camera.position.set(0, settings.camera.y, settings.camera.z);
         camera.lookAt(0,0,0);
+        camera.updateProjectionMatrix();
 
         controls.autoRotate = true;
         controls.autoRotateSpeed = settings.camera.speed;
