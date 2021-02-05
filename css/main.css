@@ -221,6 +221,13 @@ a {
   bottom: 0vh;
 }
 
+.project {
+  pointer-events: none;
+  opacity: 0;
+  transition: ease-in-out opacity 750ms;
+  color: #dddddd;
+}
+
 
 
 /* If you know, you know */

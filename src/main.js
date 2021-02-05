@@ -464,8 +464,8 @@ function webgl_main() {
     let display_mode_active = (window.location.search.substr(1) === '1');
     if (display_mode_active) {
 
-        var gui_button_box = document.getElementById("interaction-box");
-        gui_button_box.style.opacity = 0;
+        var gui_interact_box = document.getElementById("interaction-box");
+        gui_interact_box.style.opacity = 0;
 
         setInterval(() => {
             pick_pallette(); 
@@ -732,30 +732,49 @@ function webgl_main() {
 
 
     gui.hide();
-   
-    var gui_back = document.getElementById("back-button");
-    var gui_interact = document.getElementById("interaction-button");
-    var gui_button_box = document.getElementById("interaction-box");
-    gui_interact.addEventListener("click", () => {
-        gui_button_box.style.pointerEvents = "none";
 
-        gui_button_box.style.opacity = 0.0;
+    var gui_back         = document.getElementById("back-button");
+    var gui_interact     = document.getElementById("interaction-button");
+    var gui_interact_box = document.getElementById("interaction-box");
+    gui_interact.addEventListener("click", () => {
+        gui_interact_box.style.pointerEvents = "none";
+
+        gui_interact_box.style.opacity = 0.0;
         gui_back.style.opacity       = 1.0;
         gui_back.style.pointerEvents = "auto";
         
         gui.show();
         controls.enabled = true;
     });
-    gui_back.addEventListener("click", () => {
-        gui_button_box.style.pointerEvents = "auto";
 
-        gui_button_box.style.opacity = 1.0;
-        gui_back.style.opacity       = 0.0;
-        gui_back.style.pointerEvents = "none";
+    var gui_project     = document.getElementById("project-button");
+    var gui_project_box = document.getElementById("project-box");
+    gui_project.addEventListener("click", () => {
+        gui_back.style.opacity        = 1.0;
+        gui_back.style.pointerEvents  = "auto";
+
+        gui_interact_box.style.opacity       = 0.0;
+        gui_interact_box.style.pointerEvents = "none";
+
+        gui_project_box.style.opacity       = 1.0;
+        gui_project_box.style.pointerEvents = "auto";
+    });
+
+
+    gui_back.addEventListener("click", () => {
+        gui_project_box.style.opacity       = 0.0;
+        gui_project_box.style.pointerEvents = "none";
+
+        gui_interact_box.style.opacity       = 1.0;
+        gui_interact_box.style.pointerEvents = "auto";
+
+        gui_back.style.opacity         = 0.0;
+        gui_back.style.pointerEvents   = "none";
         
         gui.hide();
         controls.enabled = false;
     });
+
 
 
     function init_scene() {
