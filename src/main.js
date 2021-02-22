@@ -410,8 +410,8 @@ function webgl_main() {
     } else {
         settings.camera = {
             "fov": 70,
-            "y": 0.00,
-            "z": 4.00,
+            "y": 2.66,
+            "z": 3.50,
             "speed": 0.35,
             "exposure": 0.700,
         };

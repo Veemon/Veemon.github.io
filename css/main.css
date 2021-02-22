@@ -64,19 +64,20 @@ a {
 }
 
 .button-box {
-  padding-top: 7vh;
+  /* padding-top: 7vh; */
   padding-left: 0vw;
   position: absolute;
   /* background-color: blue; */
   transition: ease-in-out 0.6s;
   width: 100%;
+  top: 50%;
+  transform: translateY(-40%);
 }
-
 
 
 @media screen and (min-width: 2400px) {
   .button-box {
-    padding-top: 9vh;
+    /* padding-top: 9vh; */
     padding-left: 0vw;
     /* background-color: teal; */
   }
@@ -84,7 +85,7 @@ a {
 
 @media screen and (min-width: 2400px) and (max-width: 2400px) {
   .button-box {
-    padding-top: 9vh;
+    /* padding-top: 9vh; */
     padding-left: 0vw;
     /* background-color: gray; */
   }
@@ -92,7 +93,7 @@ a {
 
 @media screen and (min-width: 1950px) and (max-width: 2400px) {
   .button-box {
-    padding-top: 9vh;
+    /* padding-top: 9vh; */
     padding-left: 0vw;
     /* background-color: yellow; */
   }
@@ -100,7 +101,7 @@ a {
 
 @media screen and (min-width: 1750px) and (max-width: 1950px) {
   .button-box {
-    padding-top: 11vh;
+    /* padding-top: 11vh; */
     padding-left: 0vw;
     /* background-color: purple; */
   }
@@ -108,7 +109,7 @@ a {
 
 @media screen and (min-width: 1500px) and (max-width: 1750px) {
   .button-box {
-    padding-top: 15vh;
+    /* padding-top: 15vh; */
     padding-left: 0vw;
     /* background-color: red; */
   }
@@ -116,7 +117,7 @@ a {
 
 @media screen and (min-width: 1350px) and (max-width: 1500px) {
   .button-box {
-    padding-top: 15vh;
+    /* padding-top: 15vh; */
     padding-left: 0vw;
     /* background-color: green; */
   }
@@ -124,7 +125,7 @@ a {
 
 @media screen and (min-width: 1100px) and (max-width: 1350px) {
   .button-box {
-    padding-top: 15vh;
+    /* padding-top: 15vh; */
     padding-left: 0vw;
     /* background-color: orange; */
   }
@@ -132,7 +133,7 @@ a {
 
 @media screen and (min-width: 950px) and (max-width: 1100px) {
   .button-box {
-    padding-top: 23vh;
+    /* padding-top: 23vh; */
     padding-left: 0vw;
     /* background-color: pink; */
   }
@@ -145,19 +146,19 @@ a {
 
 @media screen and (min-height: 700px) and (max-height: 850px){
   .button-box {
-    padding-top: 8vh;
+    /* padding-top: 8vh; */
   }
 }
 
 @media screen and (min-height: 600px) and (max-height: 700px){
   .button-box {
-    padding-top: 4vh;
+    /* padding-top: 4vh; */
   }
 }
 
 @media screen and (max-height: 600px){
   .button-box {
-    padding-top: 0vh;
+    /* padding-top: 0vh; */
   }
 }
 
