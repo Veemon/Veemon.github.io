@@ -205,7 +205,7 @@ function webgl_main() {
     var settings = {
         "animation": {
             "active": true,
-            "culling": 0.6,
+            "culling": 0.9,
             "node": {
                 "feather": 0.3,
             },
@@ -216,9 +216,9 @@ function webgl_main() {
 
             "fast": {
                 "active": true,
-                "setup": 150.0,
-                "node": 450.0,
-                "edge": 550.0,
+                "setup": 125.0,
+                "node": 400.0,
+                "edge": 450.0,
             },
 
             "slow": {
@@ -268,7 +268,7 @@ function webgl_main() {
             "node": {
                 "radius": 0.0120,
                 "segments": 8,
-                "culling": 0.200,
+                "culling": 0.100,
             },
 
             "edge": {
@@ -305,7 +305,7 @@ function webgl_main() {
 
     function generate_pallette() {
         settings._pallette_blue = {
-            "background": 0x1b2426,
+            "background": 0x141a1b,
 
             "node": {
                 "low": 0.030,
@@ -315,28 +315,28 @@ function webgl_main() {
             },
 
             "edge": {
-                "low": 0.010,
-                "high": 0.920,
+                "low": 0.000,
+                "high": 0.950,
                 "main": 0x00aee6,
                 "mix": 0.1, 
             },
         };
 
         settings._pallette_orange = {
-            "background": 0x1b1b1b,
+            "background": 0x1e1e1e,
 
             "node": {
-                "low": 0.060,
+                "low": 0.100,
                 "high": 1.000,
-                "main": 0xed5432,
-                "mix": 0.12,
+                "main": 0xff0000,
+                "mix": 0.10,
             },
 
             "edge": {
-                "low": 0.020,
-                "high": 0.900,
-                "main": 0xe65200,
-                "mix": 0.18,
+                "low": 0.000,
+                "high": 1.000,
+                "main": 0xff0000,
+                "mix": 0.10,
             },
         };
 
@@ -346,14 +346,14 @@ function webgl_main() {
             "node": {
                 "low": 0.060,
                 "high": 1.000,
-                "main": 0xcacaca,
+                "main": 0xffffff,
                 "mix": 0.0,
             },
 
             "edge": {
-                "low": 0.020,
-                "high": 0.800,
-                "main": 0x757575,
+                "low": 0.005,
+                "high": 0.900,
+                "main": 0xdedede,
                 "mix": 0.0,
             },
         };
@@ -377,7 +377,7 @@ function webgl_main() {
         };
 
         settings._pallette_rainbow = {
-            "background": 0x1b1b1b,
+            "background": 0x1e1e1e,
 
             "node": {
                 "low": 0.1,
@@ -387,7 +387,7 @@ function webgl_main() {
             },
 
             "edge": {
-                "low": 0.010,
+                "low": 0.000,
                 "high": 1.000,
                 "main": 0xff0000,
                 "mix": 1.0,
@@ -409,7 +409,7 @@ function webgl_main() {
         };
     } else {
         settings.camera = {
-            "fov": 70,
+            "fov": 60,
             "y": 2.66,
             "z": 3.50,
             "speed": 0.35,
@@ -1255,6 +1255,9 @@ function webgl_main() {
                 animation_timer -= node_time;
                 animation_state = animation_states.update;
                 
+                let min_cull  = 0.4;
+                let anim_hits = 0;
+                let culling   = min_cull;
                 for (let i = 0; i < targets.length; i++) {
                     let iterator = Object.entries(nodes[targets[i]]["connections"]);
                     for (const [node_index_key, edge_result] of iterator) {
@@ -1263,13 +1266,20 @@ function webgl_main() {
                         let edge_state = edge_result[1];
 
                         if (previous_edges[edge_index]) continue;
-                        if (settings.animation.culling > 1e-6 && Math.random() <= settings.animation.culling) continue;
+                        if (settings.animation.culling > 1e-6 && Math.random() < culling) continue;
 
                         edge_data_flips[edge_index] = edge_state;
                         edge_data_start_times[edge_index] = t;
                         
                         next_targets = next_targets.concat([node_index]);
                         next_edges[edge_index] = true;
+                        anim_hits++;
+                    }
+
+                    if (anim_hits == 0 && culling > min_cull) {
+                        culling *= 0.5;
+                    } else {
+                        culling = settings.animation.culling;
                     }
                 }
 
