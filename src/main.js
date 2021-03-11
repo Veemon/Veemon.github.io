@@ -401,9 +401,9 @@ function webgl_main() {
 
     if (is_mobile) {
         settings.camera = {
-            "fov": 50,
+            "fov": 48,
             "y": 0.15,
-            "z": 6.00,
+            "z": 1.40,
             "speed": 0.35,
             "exposure": 0.700,
         };
