@@ -751,7 +751,6 @@ function webgl_main() {
 
     gui.hide();
 
-/*
     var gui_back         = document.getElementById("back-button");
     var gui_interact     = document.getElementById("interaction-button");
     var gui_interact_box = document.getElementById("interaction-box");
@@ -766,34 +765,33 @@ function webgl_main() {
         controls.enabled = true;
     });
 
-    var gui_project     = document.getElementById("project-button");
-    var gui_project_box = document.getElementById("project-box");
-    gui_project.addEventListener("click", () => {
-        gui_back.style.opacity        = 1.0;
-        gui_back.style.pointerEvents  = "auto";
+    // var gui_project     = document.getElementById("project-button");
+    // var gui_project_box = document.getElementById("project-box");
+    // gui_project.addEventListener("click", () => {
+    //     gui_back.style.opacity        = 1.0;
+    //     gui_back.style.pointerEvents  = "auto";
 
-        gui_interact_box.style.opacity       = 0.0;
-        gui_interact_box.style.pointerEvents = "none";
+    //     gui_interact_box.style.opacity       = 0.0;
+    //     gui_interact_box.style.pointerEvents = "none";
 
-        gui_project_box.style.opacity       = 1.0;
-        gui_project_box.style.pointerEvents = "auto";
-    });
+    //     gui_project_box.style.opacity       = 1.0;
+    //     gui_project_box.style.pointerEvents = "auto";
+    // });
 
 
     gui_back.addEventListener("click", () => {
-        gui_project_box.style.opacity       = 0.0;
-        gui_project_box.style.pointerEvents = "none";
-
+        // gui_project_box.style.opacity       = 0.0;
+        // gui_project_box.style.pointerEvents = "none";
+    
         gui_interact_box.style.opacity       = 1.0;
         gui_interact_box.style.pointerEvents = "auto";
-
+    
         gui_back.style.opacity         = 0.0;
         gui_back.style.pointerEvents   = "none";
         
         gui.hide();
         controls.enabled = false;
     });
-*/
 
 
     function init_scene() {
