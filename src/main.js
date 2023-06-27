@@ -751,6 +751,7 @@ function webgl_main() {
 
     gui.hide();
 
+/*
     var gui_back         = document.getElementById("back-button");
     var gui_interact     = document.getElementById("interaction-button");
     var gui_interact_box = document.getElementById("interaction-box");
@@ -792,7 +793,7 @@ function webgl_main() {
         gui.hide();
         controls.enabled = false;
     });
-
+*/
 
 
     function init_scene() {
